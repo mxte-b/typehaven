@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from 'react'
+import './assets/css/App.css'
+import TypingArea from './components/TypingArea'
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [currentQuote, setCurrentQuote] = useState<string>("");
+    const isInitialized = useRef<boolean>(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        if (isInitialized.current) return;
+
+        isInitialized.current = true;
+        fetch('https://api.quotable.io/random?minLength=150&maxLength=300')
+            .then(res => res.json())
+            .then(data => {
+                setCurrentQuote(data.content)
+            })
+    }, [])
+
+    return (
+        <>
+            <h1>Type Haven</h1>
+            <p className='color-secondary'>Type away your day</p>
+            <TypingArea quote={currentQuote}/>
+        </>
+    )
 }
 
 export default App

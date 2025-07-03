@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/src/assets/fonts/JetBrainsMono.woff2') format('woff2-variations');
+    font-weight: 100 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/src/assets/fonts/JetBrainsMono-Italic.woff2') format('woff2-variations');
+    font-weight: 100 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 1rem;
+    height: 100vh;
+    background-color: #1d1d1d;
+    color: #ececec;
+    font-family: "JetBrains Mono", 'Courier New', Courier, monospace;
+    max-width: 1500px;
+    margin-inline: auto;
+}
+
+.color-secondary {
+    color: #696969;
+}
