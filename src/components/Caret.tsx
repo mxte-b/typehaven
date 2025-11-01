@@ -1,14 +1,17 @@
 import { useEffect, useRef } from "react";
 import type { CaretPosition } from "../types/general";
 
-const LETTER_WIDTH = 15;
-
-const Caret = ({ position }: { position: CaretPosition }) => {
+const Caret = ({ position }: { position: CaretPosition | null }) => {
     const caretRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!caretRef.current) return;
-        caretRef.current.style.transform = `translate3d(${position.letterId * (LETTER_WIDTH + 1)}px, 0px, 0px)`
+        if (!caretRef.current || !position) return;
+
+        const targetCharRect = document.querySelector(`div[data-letter-id="${position.letterId}"]`)?.getBoundingClientRect();
+
+        if (!targetCharRect) return;
+
+        caretRef.current.style.transform = `translate3d(${targetCharRect.x}px, ${targetCharRect.y}px, 0px)`
     }, [position])
 
     return <div className="caret" ref={caretRef}/>

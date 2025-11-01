@@ -1,7 +1,6 @@
 .word {
     display: flex;
     flex-direction: row;
-    gap: 1px;
     font-size: 25px;
     user-select: none;
     pointer-events: none;
@@ -11,6 +10,15 @@
     user-select: none;
     pointer-events: none;
     height: 35px;
+    transition: color 0.1s ease;
+}
+
+.letter.correct {
+    color: #77cd20;
+}
+
+.letter.incorrect {
+   color: #b90505; 
 }
 
 .text-container {
@@ -20,17 +28,17 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 1.2rem;
+    gap: 15px;
     row-gap: 0.5rem;
 }
 
 .typing-test {
     margin-top: 2rem;
-    position: relative;
+    /* position: relative; */
 }
 
 .text-input {
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     height: 100%;
     opacity: 0;
