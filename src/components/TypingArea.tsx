@@ -45,8 +45,20 @@ const TypingArea = ({ quote }: { quote: string }) => {
         }
         // Remove active classes from inactive characters
         else {
-            const el = getCharacterElement(currentPosition.letterId-1);
-            el?.classList.remove("correct", "incorrect");
+            // Single character delete
+            if (delta == -1) {
+                const el = getCharacterElement(currentPosition.letterId-1);
+                el?.classList.remove("correct", "incorrect");
+            }
+            // Entire word delete
+            else {
+                const newIndex = currentPosition.letterId + delta;
+
+                for (let i = newIndex; i < currentPosition.letterId; i++) {
+                    const el = getCharacterElement(i);
+                    el?.classList.remove("correct", "incorrect");
+                }
+            }
         }
 
         // Update caret position
@@ -55,7 +67,7 @@ const TypingArea = ({ quote }: { quote: string }) => {
             return newPosition
         })
         
-        lastInputValue.current = text
+        lastInputValue.current = text;
     }
 
     const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
