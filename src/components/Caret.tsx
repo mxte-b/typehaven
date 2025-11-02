@@ -1,18 +1,18 @@
 import { useEffect, useRef } from "react";
-import type { CaretPosition } from "../types/general";
+import type { CaretState } from "../types/general";
 
-const Caret = ({ position }: { position: CaretPosition | null }) => {
+const Caret = ({ state }: { state: CaretState}) => {
     const caretRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!caretRef.current || !position) return;
+        if (!caretRef.current) return;
 
-        const targetCharRect = document.querySelector(`div[data-letter-id="${position.letterId}"]`)?.getBoundingClientRect();
+        const targetCharRect = document.querySelector(`div[data-letter-id="${state.position.letterId}"]`)?.getBoundingClientRect();
 
         if (!targetCharRect) return;
 
         caretRef.current.style.transform = `translate3d(${targetCharRect.x}px, ${targetCharRect.y}px, 0px)`
-    }, [position])
+    }, [state]);
 
     return <div className="caret" ref={caretRef}/>
 }

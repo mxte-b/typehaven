@@ -10,7 +10,8 @@
     user-select: none;
     pointer-events: none;
     height: 35px;
-    transition: color 0.1s ease;
+    border-bottom: 2px solid transparent;
+    transition: color 0.1s ease, border-bottom-color 0.2s ease, background-color 0.1s ease;
 }
 
 .letter.correct {
@@ -19,6 +20,27 @@
 
 .letter.incorrect {
    color: #b90505; 
+   background-color: #ff00001c;
+   border-bottom-color:red;
+}
+
+.word-end {
+    position: relative;
+}
+
+.word-end::after {
+    content: '';
+    width: 15px;
+    height: 33px;
+    display: block;
+    position: absolute;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom-color 0.2s ease, background-color 0.1s ease;
+}
+
+.word-end.incorrect::after {
+    background-color: #ff00001c;
+    border-bottom-color: red;
 }
 
 .text-container {
