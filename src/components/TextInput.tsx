@@ -2,12 +2,14 @@ import { useEffect, useRef, type ClipboardEventHandler, type FocusEventHandler, 
 
 const TextInput = (
     {
+        enabled,
         onInput,
         onRemove,
         onCaretShouldUpdate
     }
     :
     {
+        enabled: boolean
         onInput: (c: string) => void,
         onRemove: (delta: number) => void,
         onCaretShouldUpdate: (delta: number) => void
@@ -19,6 +21,10 @@ const TextInput = (
 
     // Event listeners
     const inputHandler: FormEventHandler<HTMLInputElement> = (e) => {
+        if (!enabled) {
+            e.preventDefault();
+            return;
+        }
 
         const text = (e.target as HTMLInputElement).value;
         const delta = text.length - lastInputValue.current.length;

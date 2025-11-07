@@ -6,15 +6,16 @@ const Caret = ({ state }: { state: CaretState}) => {
 
     useEffect(() => {
         if (!caretRef.current) return;
-
+        
         const targetCharRect = document.querySelector(`div[data-letter-id="${state.position.letterId}"]`)?.getBoundingClientRect();
-
+        
         if (!targetCharRect) return;
-
+        
         caretRef.current.style.transform = `translate3d(${targetCharRect.x}px, ${targetCharRect.y}px, 0px)`
+        
     }, [state]);
 
-    return <div className="caret" ref={caretRef}/>
+    return <div className={"caret" + (state.hidden ? " hidden" : "") + (state.typing ? " active" : "")} ref={caretRef}/>
 }
 
 export default Caret;
