@@ -3,13 +3,19 @@ import './assets/css/App.css'
 import TypingArea from './components/TypingArea'
 import { AnimatePresence, motion } from 'motion/react';
 import type { RaceResult } from './types/general';
+import ResultOverview from './components/ResultOverview';
 
 function App() {
     const [currentQuote, setCurrentQuote] = useState<string>("");
+    const [isRaceFinished, setIsRaceFinished] = useState<boolean>(false);
+    const [raceResult, setRaceResult] = useState<RaceResult | null>(null);
+
     const isInitialized = useRef<boolean>(false);
 
     const handleRaceEnd = (r: RaceResult) => {
         console.log("Race ended. Stats: ", r);
+        setIsRaceFinished(true);
+        setRaceResult(r);
     }
 
     useEffect(() => {
@@ -32,6 +38,7 @@ function App() {
                     currentQuote ? (
                         <motion.div
                             key="type-area-loaded"
+                            className="test-wrapper"
                             initial={{opacity: 0, y: 10}}
                             animate={{opacity: 1, y: 0}}
                             exit={{opacity: 0}}
@@ -41,6 +48,10 @@ function App() {
                                 quote={currentQuote}
                                 onRaceEnd={handleRaceEnd}
                             />
+                            {
+                                isRaceFinished &&
+                                <ResultOverview result={raceResult}/>
+                            }
                         </motion.div> 
                     ) :
                     <motion.div 

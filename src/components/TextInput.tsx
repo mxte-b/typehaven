@@ -54,13 +54,13 @@ const TextInput = (
     const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
         if (!inputRef.current) return;
 
-        inputRef.current.classList.add("focused")
+        inputRef.current.classList.add("focused");
     }
 
     const blurHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-        if (!inputRef.current) return;
+        if (!inputRef.current || !enabled) return;
 
-        inputRef.current.focus()
+        inputRef.current.focus();
     }
 
     // Preventing pasting into the text input

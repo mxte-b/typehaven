@@ -174,6 +174,7 @@ const TypingArea = (
 
                         // Disable the text input
                         setIsEnabled(false);
+                        setIsCaretHidden(true);
                     }
                     // Don't move the caret if it would be past the end
                     else if (state.position.letterId + delta > quote.length) {
