@@ -21,7 +21,8 @@ export type CaretState = {
 export type StatsAction =
     { type: "START" } |
     { type: "END" } |
-    { type: "INPUT", correct: boolean };
+    { type: "INPUT", correct: boolean } |
+    { type: "HISTORY_TICK" };
 
 export type RaceStats = {
     correct: number;
@@ -29,6 +30,7 @@ export type RaceStats = {
     total: number;
     startTime: number | null;
     endTime: number | null;
+    history: { time: number, wpm: number, wpmRaw: number }[];
 }
 
 export type RaceResult = {
@@ -39,4 +41,5 @@ export type RaceResult = {
     totalLetters: number;
     correctLetters: number;
     incorrectLetters: number;
+    history: { time: number, wpm: number, wpmRaw: number }[];
 }

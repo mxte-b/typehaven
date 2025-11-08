@@ -21,6 +21,7 @@ const TypingArea = (
 
     // References
     const timeoutIdRef = useRef<number | null>(null);
+    const statsHistoryIntervalRef = useRef<number | null>(null);
 
     // Hooks
     const { 
@@ -33,7 +34,8 @@ const TypingArea = (
         stats,
         startRace,
         endRace,
-        recordInput
+        recordInput,
+        historyTick
     } = useRaceStats();
 
     // Helper functions
@@ -57,11 +59,24 @@ const TypingArea = (
         }, 250);
     }
 
+    const startStatsHistoryTracking = () => {
+        statsHistoryIntervalRef.current = setInterval(historyTick, 1000);
+    }
+
+    const stopStatsHistoryTracking = () => {
+        if (!statsHistoryIntervalRef.current) return;
+
+        clearInterval(statsHistoryIntervalRef.current);
+    }
+
     const handleTextInput = (c: string) => {
         if (!isEnabled) return;
 
         // Start race
-        if (!stats.startTime) startRace();
+        if (!stats.startTime) {
+            startRace();
+            startStatsHistoryTracking();
+        }
 
         scheduleCaretBlinkAnimation();
 
@@ -128,7 +143,8 @@ const TypingArea = (
             timeInSeconds: timeInSeconds,
             totalLetters: stats.total,
             wpm: wpmRaw * accuracy,
-            wpmRaw: wpmRaw
+            wpmRaw: wpmRaw,
+            history: stats.history
         };
     }
 
@@ -170,9 +186,10 @@ const TypingArea = (
                     // End the race if the user reaches the end
                     if (state.position.letterId + delta == quote.length) {
                         // End the race
+                        stopStatsHistoryTracking();
                         endRace();
 
-                        // Disable the text input
+                        // Disable the text input, caret
                         setIsEnabled(false);
                         setIsCaretHidden(true);
                     }
