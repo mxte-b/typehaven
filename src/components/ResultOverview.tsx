@@ -15,7 +15,10 @@ const ResultOverview = ({ result }: { result: RaceResult | null }) => {
                 <div className="categories-wrapper">
                     <div className="result-category prominent">
                         <div className="category-title">WPM: </div>
-                        <div className="result-value">{Math.round(result.wpm)}</div>
+                        <div className="result-value group">
+                            <div className="whole">{Math.round(result.wpm)}</div>
+                            <div className="fraction">.{(result.wpm % 1).toString().substring(2, 4)}</div>
+                        </div>
                     </div>
                     <div className="result-category prominent">
                         <div className="category-title">Accuracy: </div>
@@ -29,6 +32,7 @@ const ResultOverview = ({ result }: { result: RaceResult | null }) => {
                         <div className="category-title">Elapsed Time: </div>
                         <div className="result-value">{Math.round(result.timeInSeconds)}s</div>
                     </div>
+                    <button type="button">Restart</button>
                 </div>
                 <LineChart data={result.history} />
             </motion.div>

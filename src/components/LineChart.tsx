@@ -30,7 +30,7 @@ const LineChart = ({ data }: { data: {time: number, wpm: number, wpmRaw: number}
             datasets: [
                 {
                     label: "WPM",
-                    data: data.map(d => ({ x: Math.round(d.time / 1000), y: d.wpm })),
+                    data: data.map(d => ({ x: Math.round(d.time / 1000), y: Math.round(d.wpm * 10) / 10 })),
                     tension: 0.3,
                     fill: true,
                     backgroundColor: "#6ebbda15",
@@ -38,11 +38,14 @@ const LineChart = ({ data }: { data: {time: number, wpm: number, wpmRaw: number}
                 },
                 {
                     label: "Raw WPM",
-                    data: data.map(d => ({ x: Math.round(d.time / 1000), y: d.wpmRaw })),
+                    data: data.map(d => ({ x: Math.round(d.time / 1000), y: Math.round(d.wpmRaw * 10) / 10 })),
                     tension: 0.3,
                     fill: true,
-                    backgroundColor: "#6e7eda15",
-                    borderColor: "#6e7edaff"
+                    backgroundColor: "#d7d7d715",
+                    borderColor: "#808080ff",
+                    segment: {
+                        borderDash: [6, 6]
+                    }
                 }
             ]
         }
@@ -55,12 +58,11 @@ const LineChart = ({ data }: { data: {time: number, wpm: number, wpmRaw: number}
                 type: "linear",
                 title: { 
                     display: true, 
-                    text: "Time",
+                    text: "Time (seconds)",
                     font: { family: 'JetBrains Mono', size: 14, weight: 'bold' }
                 },
                 ticks: {
-                    stepSize: 1,
-                    callback: (v: number | string) => `${v}s`
+                    stepSize: 1
                 },
                 grid: {
                     color: "#232323"
@@ -69,7 +71,7 @@ const LineChart = ({ data }: { data: {time: number, wpm: number, wpmRaw: number}
             y: {
                 title: { 
                     display: true, 
-                    text: "WPM",
+                    text: "Words Per Minute",
                     font: { family: 'JetBrains Mono', size: 14, weight: 'bold' }
                 },
                 grid: {
@@ -81,6 +83,9 @@ const LineChart = ({ data }: { data: {time: number, wpm: number, wpmRaw: number}
             legend: { display: true, labels: { font: { family: "JetBrains Mono" } } },
             tooltip: { 
                 enabled: true, 
+                callbacks: {
+                    title: (v) => `Time: ${v[0].label}s`
+                },
                 intersect: false, 
                 titleFont: { family: "JetBrains Mono" }, 
                 bodyFont: { family: "JetBrains Mono" } 

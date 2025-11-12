@@ -22,7 +22,7 @@ function App() {
         if (isInitialized.current) return;
 
         isInitialized.current = true;
-        fetch('https://quoteslate.vercel.app/api/quotes/random?minLength=150&maxLength=300')
+        fetch('https://quoteslate.vercel.app/api/quotes/random?maxLength=300')
             .then(res => res.json())
             .then(data => {
                 setCurrentQuote(data.quote)
