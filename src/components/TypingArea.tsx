@@ -6,6 +6,8 @@ import useCaret from "../hooks/useCaret";
 import type { RaceResult } from "../types/general";
 import useRaceStats from "../hooks/useRaceStats";
 
+let firstLoad = true;
+
 const TypingArea = (
     { 
         quote,
@@ -27,13 +29,15 @@ const TypingArea = (
     const { 
         state, 
         moveCaret, refreshCaret, 
+        resetCaret,
         setIsCaretHidden, setIsTyping
     } = useCaret();
 
     const { 
         stats,
-        startRace,
-        endRace,
+        startRaceTracking,
+        endRaceTracking,
+        clearRaceTrackingData,
         recordInput,
         historyTick
     } = useRaceStats();
@@ -74,7 +78,7 @@ const TypingArea = (
 
         // Start race
         if (!stats.startTime) {
-            startRace();
+            startRaceTracking();
             startStatsHistoryTracking();
         }
 
@@ -148,6 +152,19 @@ const TypingArea = (
         };
     }
 
+    const clearLetterStates = () => {
+        Array.from(document.querySelectorAll(".letter, .word-end")).forEach(e => e.classList.remove("correct", "incorrect"));
+    }
+
+    // New race (clear previous data and reset caret)
+    const newRace = () => {
+        clearLetterStates();
+        setIsCaretHidden(true);
+        resetCaret();
+        clearRaceTrackingData();
+        setIsEnabled(true);
+    }
+
     // Handle race end (after stats have updated)
     useEffect(() => {
         if (!stats.endTime) return;
@@ -166,6 +183,12 @@ const TypingArea = (
     // Update caret after quote load
     useEffect(() => {
         if (!quote) return;
+        
+        if (!firstLoad) {
+            newRace();
+        }
+
+        if (firstLoad) firstLoad = false;
 
         setTimeout(() => {
             // Update caret's position
@@ -186,8 +209,8 @@ const TypingArea = (
                     // End the race if the user reaches the end
                     if (state.position.letterId + delta == quote.length) {
                         // End the race
-                        stopStatsHistoryTracking();
-                        endRace();
+                        stopStatsHistoryTracking(); // Push remaining WPM data
+                        endRaceTracking();
 
                         // Disable the text input, caret
                         setIsEnabled(false);

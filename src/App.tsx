@@ -18,15 +18,25 @@ function App() {
         setRaceResult(r);
     }
 
-    useEffect(() => {
-        if (isInitialized.current) return;
+    const handleNewRace = () => {
+        setIsRaceFinished(false);
+        setRaceResult(null);
+        setCurrentQuote("");
+        newQuote();
+    }
 
-        isInitialized.current = true;
+    const newQuote = () => {
         fetch('https://quoteslate.vercel.app/api/quotes/random?maxLength=300')
             .then(res => res.json())
             .then(data => {
                 setCurrentQuote(data.quote)
-            })
+            });
+    }
+    
+    useEffect(() => {
+        if (isInitialized.current) return;
+        isInitialized.current = true;
+        newQuote();
     }, []);
 
     return (
@@ -35,7 +45,7 @@ function App() {
             <p className='color-secondary'>Type away your day</p>
             <AnimatePresence mode="wait">
                 {
-                    currentQuote ? (
+                    currentQuote.length > 0 ? (
                         <motion.div
                             key="type-area-loaded"
                             className="test-wrapper"
@@ -50,7 +60,10 @@ function App() {
                             />
                             {
                                 isRaceFinished &&
-                                <ResultOverview result={raceResult}/>
+                                <ResultOverview 
+                                    result={raceResult}
+                                    onNewRaceButtonClicked={handleNewRace}
+                                />
                             }
                         </motion.div> 
                     ) :

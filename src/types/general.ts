@@ -21,6 +21,7 @@ export type CaretState = {
 export type StatsAction =
     { type: "START" } |
     { type: "END" } |
+    { type: "CLEAR" } |
     { type: "INPUT", correct: boolean } |
     { type: "HISTORY_TICK" };
 

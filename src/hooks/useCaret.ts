@@ -1,16 +1,21 @@
 import { useReducer } from "react";
 import type { CaretAction, CaretPosition, CaretState } from "../types/general";
 
-const reducer = (state: CaretState, action: CaretAction) => {
+const reducer = (state: CaretState, action: CaretAction): CaretState => {
     switch (action.type) {
         case "MOVE":
-            return { ...state, position: {...state.position, letterId: state.position.letterId + action.delta} } as CaretState;
+            return { ...state, position: {...state.position, letterId: state.position.letterId + action.delta} };
         case "SET":
-            return { ...state, position: action.position } as CaretState;
+            return { ...state, position: action.position };
         case "RESET":
-            return { position: { letterId: 0, wordId: 0 }, refresh: state.refresh + 1} as CaretState;
+            return { 
+                position: { letterId: 0, wordId: 0 }, 
+                refresh: 0, 
+                hidden: true,
+                typing: false
+            }
         case "REFRESH":
-            return { ...state, refresh: state.refresh + 1 } as CaretState;
+            return { ...state, refresh: state.refresh + 1 };
         case "SET_HIDDEN":
             return { ...state, hidden: action.hidden };
         case "SET_TYPING":

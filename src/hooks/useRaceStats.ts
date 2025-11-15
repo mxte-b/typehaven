@@ -1,19 +1,29 @@
 import { useReducer } from "react";
 import type { RaceStats, StatsAction } from "../types/general";
 
-const reducer = (state: RaceStats, action: StatsAction) => {
+const reducer = (state: RaceStats, action: StatsAction): RaceStats => {
     switch (action.type) {
         case "START":
-            return { ...state, startTime: performance.now() } as RaceStats;
+            return { ...state, startTime: performance.now() };
         case "END":
-            return { ...state, endTime: performance.now() } as RaceStats;
+            return { ...state, endTime: performance.now() };
+        case "CLEAR": {
+            return {
+                correct: 0,
+                incorrect: 0,
+                total: 0,
+                startTime: null,
+                endTime: null,
+                history: []
+            }
+        }
         case "INPUT":
             return { 
                 ...state, 
                 total: state.total + 1,
                 [action.correct ? "correct": "incorrect"]: 
                     state[action.correct ? "correct": "incorrect"] + 1
-            } as RaceStats;
+            };
         case "HISTORY_TICK":
             if (!state.startTime) return state;
             
@@ -49,18 +59,23 @@ const useRaceStats = () => {
         history: []
     });
 
-    const startRace = () => dispatch({ type: "START" });
-    const endRace = () => {
+    const startRaceTracking = () => dispatch({ type: "START" });
+    const endRaceTracking = () => {
         dispatch({ type: "HISTORY_TICK" });
         dispatch({ type: "END" });
+    }
+    const clearRaceTrackingData = () => {
+        dispatch({ type: "END" });
+        dispatch({ type: "CLEAR" });
     }
     const recordInput = (correct: boolean) => dispatch({ type: "INPUT", correct: correct }); 
     const historyTick = () => dispatch({ type: "HISTORY_TICK" });
 
     return {
         stats: state,
-        startRace,
-        endRace,
+        startRaceTracking,
+        endRaceTracking,
+        clearRaceTrackingData,
         recordInput,
         historyTick
     }

@@ -71,7 +71,7 @@ const TextInput = (
     // Auto-focus on the typing area
     useEffect(() => {
         inputRef.current?.focus();
-    }, []);
+    }, [enabled]);
 
     return (
         <input 
