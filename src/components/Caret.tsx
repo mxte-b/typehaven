@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { CaretState } from "../types/general";
 
-const Caret = ({ state }: { state: CaretState}) => {
+const Caret = ({ state, isGhost }: { state: CaretState, isGhost ?: boolean }) => {
     const caretRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const Caret = ({ state }: { state: CaretState}) => {
         
     }, [state]);
 
-    return <div className={"caret" + (state.hidden ? " hidden" : "") + (state.typing ? " active" : "")} ref={caretRef}/>
+    return <div className={"caret" + (isGhost ? " ghost" : "") + (state.hidden ? " hidden" : "") + (state.typing ? " active" : "")} ref={caretRef}/>
 }
 
 export default Caret;

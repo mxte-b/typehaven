@@ -7,6 +7,7 @@ import ResultOverview from './components/ResultOverview';
 
 function App() {
     const [currentQuote, setCurrentQuote] = useState<string>("");
+    const [retryIndex, setRetryIndex] = useState<number>(-1);
     const [isRaceFinished, setIsRaceFinished] = useState<boolean>(false);
     const [raceResult, setRaceResult] = useState<RaceResult | null>(null);
 
@@ -22,7 +23,14 @@ function App() {
         setIsRaceFinished(false);
         setRaceResult(null);
         setCurrentQuote("");
+        setRetryIndex(-1);
         newQuote();
+    }
+
+    const handleRetry = () => {
+        setIsRaceFinished(false);
+        setRaceResult(null);
+        setRetryIndex(i => i + 1);
     }
 
     const newQuote = () => {
@@ -56,12 +64,14 @@ function App() {
                         >
                             <TypingArea 
                                 quote={currentQuote}
+                                retryIndex={retryIndex}
                                 onRaceEnd={handleRaceEnd}
                             />
                             {
                                 isRaceFinished &&
                                 <ResultOverview 
                                     result={raceResult}
+                                    onRetryButtonClicked={handleRetry}
                                     onNewRaceButtonClicked={handleNewRace}
                                 />
                             }

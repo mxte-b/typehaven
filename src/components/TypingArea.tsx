@@ -5,21 +5,25 @@ import TextInput from "./TextInput";
 import useCaret from "../hooks/useCaret";
 import type { RaceResult } from "../types/general";
 import useRaceStats from "../hooks/useRaceStats";
+import CaretGhost from "./CaretGhost";
 
 let firstLoad = true;
 
 const TypingArea = (
     { 
         quote,
+        retryIndex,
         onRaceEnd
     }: 
     { 
         quote: string,
+        retryIndex: number
         onRaceEnd: (results: RaceResult) => void
     }) => {
 
     // States
     const [isEnabled, setIsEnabled] = useState<boolean>(true);
+    const [ghostStats, setGhostStats] = useState<RaceResult | null>(null);
 
     // References
     const timeoutIdRef = useRef<number | null>(null);
@@ -158,6 +162,10 @@ const TypingArea = (
 
     // New race (clear previous data and reset caret)
     const newRace = () => {
+        // If the user retries, store previous result
+        if (retryIndex > -1) {
+            setGhostStats(getRaceResults());
+        }
         clearLetterStates();
         setIsCaretHidden(true);
         resetCaret();
@@ -183,7 +191,8 @@ const TypingArea = (
     // Update caret after quote load
     useEffect(() => {
         if (!quote) return;
-        
+
+        console.log(retryIndex)
         if (!firstLoad) {
             newRace();
         }
@@ -197,7 +206,7 @@ const TypingArea = (
             // Make caret visible after adjusting to correct position (150ms transition)
             setTimeout(() => setIsCaretHidden(false), 150);
         } , 200);
-    }, [quote]);
+    }, [quote, retryIndex]);
 
     return (
         <div className="typing-test">
@@ -230,6 +239,10 @@ const TypingArea = (
             </div>
 
             <Caret state={state}/>
+            { 
+                (stats.startTime && retryIndex > -1 && !stats.endTime) &&
+                <CaretGhost targetStats={ghostStats} />
+            }
         </div>
     )
 }
